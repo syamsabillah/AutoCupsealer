@@ -17,11 +17,9 @@
 #define Dir_4 18
 #define SDA_LCD 21
 #define SCL_LCD 22
-#define Limit_Switch 1
 #define CLK_Rotary 16
 #define DT_Rotary 17
 #define SW_Rotary 5
-#define Limit_switch 35
 #define Limit_Switch 0
 #define Limit_Switch2 12
 
@@ -33,7 +31,7 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 #define DIRECTION_CCW 1  // counter-clockwise direction
 int direction = DIRECTION_CW;
 
-ezButton limit_switch1(Limit_Switch );  // create ezButton object for button 4
+ezButton limit_switch1(Limit_Switch);  // create ezButton object for button 4
 ezButton limit_switch2(Limit_Switch2);  // create ezButton object for button 4
 ezButton button(SW_Rotary);
 int CLK_state;
@@ -65,8 +63,8 @@ void setup() {
   limit_switch2.setDebounceTime(50);  // set debounce time to 100 milliseconds
 
   // Initialize steppers
-  stepper1.setMaxSpeed(18000);
-  stepper1.setAcceleration(15000);
+  stepper1.setMaxSpeed(20000); //atur maksimal kecepatan
+  stepper1.setAcceleration(18000); //atur akselerasi
   stepper2.setMaxSpeed(10000);
   stepper2.setAcceleration(10000);
   stepper3.setMaxSpeed(10000);
@@ -120,7 +118,7 @@ void startUp() {
 int limit2 = limit_switch2.getState();
 
 if (limit1 == HIGH) {
-  stepper1.moveTo(40000); // Move to drop cup station
+  stepper1.moveTo(40000); // Move to exit section
   while (stepper1.distanceToGo() != 0) {
     stepper1.run();
 
@@ -238,21 +236,22 @@ void executeSystem() {
   }
 
   stepper3.moveTo(roll_plastik);
-  while (stepper3.distanceToGo() != 0) {
+  stepper1.moveTo(-500); // Go to exit
+ while (stepper3.distanceToGo() != 0 || stepper1.distanceToGo() != 0) {
+  if (stepper3.distanceToGo() != 0) {
     stepper3.run();
   }
-
-  stepper1.moveTo(-500); // Go to exit
-  while (stepper1.distanceToGo() != 0) {
+  if (stepper1.distanceToGo() != 0) {
     stepper1.run();
   }
+}
 
-  stepper4.moveTo(7000); // Go to exit
+  stepper4.moveTo(7000); // angkat 
   while (stepper4.distanceToGo() != 0) {
     stepper4.run();
   }
 
-  stepper4.moveTo(0); // Go to exit
+  stepper4.moveTo(0); // turun
   while (stepper4.distanceToGo() != 0) {
     stepper4.run();
   }
