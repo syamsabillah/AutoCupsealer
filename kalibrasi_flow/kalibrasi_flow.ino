@@ -2,7 +2,6 @@
 #include <LiquidCrystal_I2C.h>
 #include <ezButton.h>
 
-#define Button_enter 34
 #define SENSOR  13
 #define Relay_Valve 15
 #define Relay_LED 2
@@ -30,7 +29,6 @@ void IRAM_ATTR pulseCounter() {
 
 void setup() {
   Serial.begin(115200);
-  pinMode(Button_enter, INPUT_PULLDOWN);
   pinMode(SENSOR, INPUT_PULLUP);
   pinMode(Relay_Valve, OUTPUT);
   pinMode(Relay_LED, OUTPUT);

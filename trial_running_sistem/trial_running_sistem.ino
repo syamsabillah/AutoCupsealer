@@ -108,31 +108,12 @@ void loop() {
     default:
       System_ready = 0; // Reset to initial state
       break;
-  } 
-}
-
-void startUp() {
-int limit1 = limit_switch1.getState();
-int limit2 = limit_switch2.getState();
-
-if (limit1 == HIGH) {
-  stepper1.moveTo(40000); // Move to exit section
-  while (stepper1.distanceToGo() != 0) {
-    stepper1.run();
-
-    // Update the state of limit1 inside the loop
-    limit1 = limit_switch1.getState();
-    if (limit1 == LOW) {
-      stepper1.stop();
-      stepper1.setCurrentPosition(0);
-      break;
-    }
-  }
-}
-
-
     
+  } 
   
+}
+
+void startUp() {  
   static bool lcdUpdated = false; // Flag to check if the LCD has been updated
 
   if (!lcdUpdated) {
@@ -232,6 +213,12 @@ void executeSystem() {
   while (stepper1.distanceToGo() != 0) {
     stepper1.run();
   }
+
+  //press logic
+  //press 4 detik lalu naik, suhu elemen di 165 celcius
+  // nyala relay press
+  // angkat press
+  //end press logic
 
   stepper3.moveTo(roll_plastik);
   stepper1.moveTo(-500); // Go to exit
